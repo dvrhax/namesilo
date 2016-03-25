@@ -9,16 +9,16 @@ def read(fname):
 
 setup(
     name='namesilo',
-    version='0.1.2',
-    url='http://github.com/kolanos/namesilo',
+    version='0.2.0',
+    url='http://github.com/dvrhax/namesilo',
     license='MIT',
-    author='Michael Lavers',
-    author_email='kolanos@gmail.com',
+    author='Dvr Hax',
+    author_email='dvrhax@yahoo.com',
     description='A simple wrapper for the NameSilo API.',
     long_description=read('README.rst'),
     py_modules=['namesilo'],
     platforms='any',
-    install_requires=['requests'],
+    install_requires=['requests', 'untangle'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
