@@ -15,9 +15,11 @@ with open('apikey', 'r') as f:
 with open('domain', 'r') as f:
     domain = f.read().strip('\r\n')
 
+#ns = namesilo.NameSilo(apikey, live=True, legacy=True) #Utilizing legacy naming convention
 ns = namesilo.NameSilo(apikey, live=True)
 
-reply = ns.list_dns_records(domain=domain)
+#reply = ns.list_dns_records(domain=domain) #Legacy naming convention
+reply = ns.dnsListRecords(domain=domain)
 
 dnsRecords = []
 

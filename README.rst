@@ -30,10 +30,17 @@ Instantiating the client:
     # Instantitate in live mode
     ns = namesilo.NameSilo('API KEY HERE', live=True)
 
+    # Instantitate in legacy mode - Legacy mode allows you to use the previous operation naming convention by default operations will be called identical to the api reference
+    ns = namesilo.NameSilo('API KEY HERE', legacy=True)
+
     # You can also control batch mode, api version, and response type
     ns = namesilo.NameSilo('API KEY HERE', live=False, batch=False, version='1', responseType='xml')
 
 From here you can call operations like so:
+
+    ns.registerDomain(domain='yourdomain.com', years='1')
+
+	Or in legacy mode
 
     ns.register_domain(domain='yourdomain.com', years='1')
 
