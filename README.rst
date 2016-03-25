@@ -6,6 +6,10 @@ A simple wrapper for the NameSilo API_.
 
 .. _API: https://www.namesilo.com/api_reference.php
 
+Forked with minor updates and code changes from https://github.com/kolanos/namesilo
+
+For the latest updates on this fork see https://github.com/dvrhax/namesilo
+
 Install
 --------
 
@@ -25,6 +29,9 @@ Instantiating the client:
 
     # Instantitate in live mode
     ns = namesilo.NameSilo('API KEY HERE', live=True)
+
+    # You can also control batch mode, api version, and response type
+    ns = namesilo.NameSilo('API KEY HERE', live=False, batch=False, version='1', responseType='xml')
 
 From here you can call operations like so:
 

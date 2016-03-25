@@ -1,7 +1,7 @@
-import xml.etree.cElementTree as ElementTree
+#import xml.etree.cElementTree as ElementTree
 
 import requests
-
+import untangle
 
 NAMESILO_OPERATIONS = {
     'add_account_funds': 'addAccountFunds',
@@ -259,15 +259,16 @@ NAMESILO_ERRORS = {
 
 
 class NameSilo(object):
-    LIVE_BASE_URL = 'https://www.namesilo.com/api/'
-    SANDBOX_BASE_URL = 'http://sandbox.namesilo.com/api/'
+    LIVE_BASE_URL = 'https://{live}.namesilo.com/api{batch}/'
 
-    VERSION = '1'
-    RESPONSE_TYPE = 'xml'
-
-    def __init__(self, api_key, live=False):
+    def __init__(self, api_key, live=False, batch=False, version='1', responseType='xml'):
         self.api_key = api_key
-        self.base_url = self.LIVE_BASE_URL if live else self.SANDBOX_BASE_URL
+        self.version = version
+        self.responseType = responseType
+        urlDict = {'live':'sandbox', 'batch':''}
+        if live: urlDict['live'] = 'www'
+        if batch: urlDict['batch'] = 'batch'
+        self.base_url = self.LIVE_BASE_URL.format(**urlDict)
 
     def __getattr__(self, name):
         if name in NAMESILO_OPERATIONS:
@@ -278,22 +279,22 @@ class NameSilo(object):
 
     def request(self, operation, **kwargs):
         operation = NAMESILO_OPERATIONS.get(operation, operation)
-        kwargs.update(version=self.VERSION, type=self.RESPONSE_TYPE,
+        kwargs.update(version=self.version, type=self.responseType,
                       key=self.api_key)
         r = requests.get(self.base_url + operation, params=kwargs)
         r.raise_for_status()
-        root = ElementTree.XML(r.text)
-        response = XmlDictConfig(root)
-        reply = response.get('reply')
-        reply = self.format_reply(reply)
+        response = untangle.parse(r.text)
+        reply = response.namesilo.reply
+        #reply = self.format_reply(reply) Removing from processing stream at this point due to issues with old xml parsing and switching to untangle
         self.handle_error(reply)
         return reply
 
+
     def handle_error(self, reply):
-        code = reply.get('code')
+        code = reply.code.cdata
         if code in NAMESILO_ERRORS:
             error = NAMESILO_ERRORS[code]
-            raise error(reply.get('detail'))
+            raise error(reply.detail.cdata)
 
     def format_reply(self, reply):
         for k, v in reply.items():
