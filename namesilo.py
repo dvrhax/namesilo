@@ -259,7 +259,7 @@ NAMESILO_ERRORS = {
 
 
 class NameSilo(object):
-    LIVE_BASE_URL = ' https://www.namesilo.com/api/'
+    LIVE_BASE_URL = 'https://www.namesilo.com/api/'
     SANDBOX_BASE_URL = 'http://sandbox.namesilo.com/api/'
 
     VERSION = '1'
@@ -296,7 +296,7 @@ class NameSilo(object):
             raise error(reply.get('detail'))
 
     def format_reply(self, reply):
-        for k, v in reply.iteritems():
+        for k, v in reply.items():
             if isinstance(v, dict):
                 reply[k] = self.format_reply(v)
             elif not isinstance(v, list):
